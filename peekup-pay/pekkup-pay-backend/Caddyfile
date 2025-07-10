@@ -1,0 +1,3 @@
+{$DOMAIN_SCHEME}://api.{$DOMAIN_NAME} {
+    reverse_proxy peekup_pay_backend:3000
+}

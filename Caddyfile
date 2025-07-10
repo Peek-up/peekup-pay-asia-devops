@@ -1,11 +1,3 @@
 #import ./common/monitoring/Caddyfile
-#import ./common/minio/Caddyfile
-#import ./common/hasura/Caddyfile
-#import ./common/environment/Caddyfile
-# The registry doesn't have a auth thus exposing it publicly means anyone can access the images pushed to this registry
-#import ./common/registry/Caddyfile
-#import ./common/uptime/Caddyfile
-#import ./common/rabbitmq/Caddyfile
 #import ./common/kong/Caddyfile
-#import ./common/pgweb/Caddyfile
-# import ./common/hello_world/Caddyfile
+import ./peekup-pay/peeup_pay_backend/Caddyfile

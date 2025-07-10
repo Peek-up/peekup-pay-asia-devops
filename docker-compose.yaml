@@ -1,24 +1,16 @@
 include:
  - ./common/monitoring/docker-compose.yaml
- - ./common/minio/docker-compose.yaml
-#  - ./common/environment/docker-compose.yaml
-#  - ./common/uptime/docker-compose.yaml
-#  - ./common/clickhouse/docker-compose.yaml
  - ./common/redis/docker-compose.yaml
  - ./common/db/docker-compose.yaml
-#  - ./common/registry/docker-compose.yaml
-#  - ./common/rabbitmq/docker-compose.yaml
- - ./common/kong/docker-compose.yaml
-#  - ./common/pgweb/docker-compose.yaml
-#  - ./common/hasura/docker-compose.yaml
-
+#  - ./common/kong/docker-compose.yaml
+ - ./peekup-pay/peekup_pay_backend/docker-compose.yaml
 services:
   caddy:
     extends:
       file: common/caddy/docker-compose.yaml
       service: caddy
     volumes:
-     - ./epic:/etc/caddy/epic
+     - ./peekup-pay:/etc/caddy/peekup-pay
 
 volumes:
   caddy_data:
