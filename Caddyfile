@@ -1,7 +1,3 @@
-#import ./common/monitoring/Caddyfile
-#import ./common/kong/Caddyfile
-# import ./peekup-pay/peeup_pay_backend/Caddyfile
-
 :80 {
     respond "Healthy!" 200
 }
