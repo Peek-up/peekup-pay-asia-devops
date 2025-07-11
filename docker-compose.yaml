@@ -2,7 +2,7 @@ include:
 #  - ./common/monitoring/docker-compose.agent.yaml
  - ./common/redis/docker-compose.yaml
 #  - ./common/kong/docker-compose.yaml
- - ./peekup-pay/peekup_pay_backend/docker-compose.yaml
+ - ./peekup-pay/peekup-pay-backend/docker-compose.yaml
 services:
   caddy:
     extends:
