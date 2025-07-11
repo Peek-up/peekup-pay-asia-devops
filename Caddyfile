@@ -1,3 +1,4 @@
-:80 {
-    respond "Healthy!" 200
-}
+import ./common/kong/Caddyfile
+import ./peekup-pay/peeup_pay_backend/Caddyfile
+import ./peekup-pay/healt_check/Caddyfile
+#import ./common/monitoring/Caddyfile.agent

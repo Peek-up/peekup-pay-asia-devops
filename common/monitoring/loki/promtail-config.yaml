@@ -6,44 +6,38 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: https://loki.epic.uat.infra.esmagico.in/loki/api/v1/push
+    tls_config:
+      insecure_skip_verify: true  
 
 scrape_configs:
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
 
-- job_name: containers
-  static_configs:
-  - targets:
-      - localhost
-    labels:
-      job: containerlogs
-      __path__: /var/lib/docker/containers/*/*log
+    relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        target_label: container_name
 
-  pipeline_stages:
-  - json:
-      expressions:
-        log: log
-        stream: stream
-        time: time
-        tag: attrs.tag
-        compose_project: attrs."com.docker.compose.project"
-        compose_service: attrs."com.docker.compose.service"
-        stack_name: attrs."com.docker.stack.namespace"
-        # swarm_service_name: attrs."com.docker.swarm.service.name"
-        # swarm_task_name: attrs."com.docker.swarm.task.name"
-  - regex:
-      expression: "^/var/lib/docker/containers/(?P<container_id>.{12}).+/.+-json.log$"
-      source: filename
-  - timestamp:
-      format: RFC3339Nano
-      source: time
-  - labels:
-      stream:
-      container_id:
-      tag:
-      compose_project:
-      compose_service:
-      stack_name:
-      # swarm_service_name:
-      # swarm_task_name:
-  - output:
-      source: log
+      - source_labels: [__meta_docker_container_label_com_docker_compose_service]
+        target_label: compose_service
+
+      - source_labels: [__meta_docker_container_label_com_docker_compose_project]
+        target_label: compose_project
+
+      - source_labels: [__meta_docker_container_id]
+        target_label: container_id
+
+    pipeline_stages:
+      - json:
+          expressions:
+            log: log
+            time: time
+
+      - timestamp:
+          format: RFC3339Nano
+          source: time
+
+      - output:
+          source: log
