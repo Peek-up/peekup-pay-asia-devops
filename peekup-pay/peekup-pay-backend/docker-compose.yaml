@@ -4,9 +4,6 @@ services:
       context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay.git#${PEEKUP_PAY_BACKEND_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
     command: ./scripts/start.sh
     restart: always
-    volumes:
-      - ./src:/home/app/peekuppay
-      - ./logs:/var/log/celery
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?DJANGO_SECRET_KEY is not set}
       DJANGO_DEBUG: ${DJANGO_DEBUG:?DJANGO_DEBUG is not set}
