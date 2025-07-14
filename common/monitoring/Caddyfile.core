@@ -1,7 +1,0 @@
-{$DOMAIN_SCHEME}://grafana.{$DOMAIN_NAME} {
-    reverse_proxy grafana:3000
-}
-
-{$DOMAIN_SCHEME}://loki.{$DOMAIN_NAME} {
-    reverse_proxy loki:3100
-}

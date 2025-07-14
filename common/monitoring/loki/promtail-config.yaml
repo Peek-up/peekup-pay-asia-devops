@@ -6,7 +6,7 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: https://loki.epic.uat.infra.esmagico.in/loki/api/v1/push
+  - url: http://10.0.156.88/loki/api/v1/push
     tls_config:
       insecure_skip_verify: true  
 

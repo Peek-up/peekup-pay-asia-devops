@@ -5,3 +5,7 @@
 {$DOMAIN_SCHEME}://cadvisor.{$DOMAIN_NAME} {
     reverse_proxy cadvisor:8080
 }
+
+{$DOMAIN_SCHEME}://promtail.{$DOMAIN_NAME} {
+    reverse_proxy promtail:9080
+}
