@@ -1,4 +1,4 @@
 import ./common/kong/Caddyfile
 import ./peekup-pay/peekup-pay-backend/Caddyfile
 import ./peekup-pay/target_health/Caddyfile
-# import ./common/monitoring/Caddyfile.agent
+import ./common/monitoring/Caddyfile
