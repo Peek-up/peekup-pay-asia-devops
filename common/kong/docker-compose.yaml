@@ -2,6 +2,8 @@ services:
   kong:
     image: kong:3.6.1
     user: kong
+    ports:
+      - 8001:8001
     environment:
       KONG_DATABASE: off
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
