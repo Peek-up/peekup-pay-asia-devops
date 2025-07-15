@@ -14,7 +14,7 @@ services:
 
   #backend service routes
   - name: peekup_pay_backend
-    url: http://peekup_pay_backend:8000
+    url: http://peekup-pay-backend:8000
     routes:
       - name: payments-v2-initiate-expression
         expression: >

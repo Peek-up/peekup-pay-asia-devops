@@ -1,5 +1,5 @@
 services:
-  peekup_pay_backend:
+  peekup-pay-backend:
     build: 
       context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay.git#${PEEKUP_PAY_BACKEND_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
     command: ./scripts/start.sh
