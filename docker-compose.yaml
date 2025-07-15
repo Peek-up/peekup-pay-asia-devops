@@ -1,7 +1,7 @@
 include:
  - ./common/monitoring/docker-compose.yaml
  - ./common/redis/docker-compose.yaml
-#  - ./common/kong/docker-compose.yaml
+ - ./common/kong/docker-compose.yaml
  - ./peekup-pay/peekup-pay-backend/docker-compose.yaml
 services:
   caddy:
