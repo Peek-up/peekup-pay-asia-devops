@@ -1,34 +1,18 @@
-# a very minimal declarative config file
 _format_version: "3.0"
 
-# plugins:
-#   - name: prometheus
-#     enabled: true
-#     config:
-#       per_consumer: true
-#       status_code_metrics: true
-#       latency_metrics: true
-#       bandwidth_metrics: true
-#       upstream_health_metrics: true
+plugins:
+  - name: prometheus
+    enabled: true
+    config:
+      per_consumer: true
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
 
-#   - name: rate-limiting
-#     enabled: true
-#     config:
-#       minute: 100  # Allows 100 RPM
-#       policy: local 
+services:
 
-
-# services:
-#   - name: epic_global_ai
-#     url: http://epic_global_ai:5000
-#     routes:
-#     - name: ai_route
-#       expression: 'http.path ^= "/ai" '
-#       plugins:
-#         - name: rate-limiting
-#           config:
-#             second: 10 
-#             policy: local
-
-
-## Onboard your services using the same format
+  #backend service routes
+  - name: peekup_pay_backend
+    url: http://peekup_pay_backend:8000
+    routes:
