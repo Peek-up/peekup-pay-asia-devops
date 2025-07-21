@@ -64,9 +64,9 @@ services:
           http.method == "GET"
         strip_path: false
 
-      - name: super-catch-all-route
-        expression: >
-          true
-        strip_path: false
+      # - name: super-catch-all-route
+      #   expression: >
+      #     true
+      #   strip_path: false
 
       
