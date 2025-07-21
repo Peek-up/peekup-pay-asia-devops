@@ -64,8 +64,8 @@ services:
           http.method == "GET"
         strip_path: false
         
-      - name: backend-super-route
-        expression: 'http.path ~ "^/api$"'
+      - name: backend_super_route
+        expression: 'http.path ~ "^/?(?<sub_path>.*)"' 
         strip_path: false
 
 
