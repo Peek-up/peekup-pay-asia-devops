@@ -65,7 +65,7 @@ services:
         strip_path: false
         
       - name: backend-super-route
-        expression: 'http.path ^= "/api/'
+        expression: 'http.path ~ "^/api$"'
         strip_path: false
 
 
