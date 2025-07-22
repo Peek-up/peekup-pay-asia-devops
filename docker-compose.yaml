@@ -1,8 +1,3 @@
-include:
- - ./common/monitoring/docker-compose.yaml
- - ./common/redis/docker-compose.yaml
- - ./common/kong/docker-compose.yaml
- - ./peekup-pay/peekup-pay-backend/docker-compose.yaml
 services:
   caddy:
     extends:
@@ -10,7 +5,3 @@ services:
       service: caddy
     volumes:
      - ./peekup-pay:/etc/caddy/peekup-pay
-
-volumes:
-  caddy_data:
-  caddy_config:

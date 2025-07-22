@@ -1,0 +1,42 @@
+services:
+  node_exporter:
+    image: prom/node-exporter:v1.8.2
+    hostname: ${org}-${env}
+    restart: always
+    ports:
+      - 9100:9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--path.udev.data=/rootfs/run/udev/data'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1 
+    restart: always
+    ports:
+      - 8080:8080
+    privileged: true
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+
+  promtail:
+    image: grafana/promtail:2.9.5 
+    restart: always
+    volumes:
+      - '/var/lib/docker/containers:/var/lib/docker/containers:ro'    #config of docker bath to be changed as per the disk
+      - './loki/promtail-config.yaml:/etc/promtail/promtail-config.yaml'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    command: -config.file=/etc/promtail/promtail-config.yaml
