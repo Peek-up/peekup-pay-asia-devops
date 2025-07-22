@@ -33,6 +33,12 @@ services:
           http.path == "/api/v1/payments/webhooks/coins-ph/coins/order/notify" &&
           http.method == "POST"
         strip_path: false
+        
+      - name: cashin-webhook-notify-v2
+        expression: >
+          http.path == "/api/v1/payments/webhooks/coins-ph/coins/order/cash-in-notify" &&
+          http.method == "POST"
+        strip_path: false
 
       - name: cashout-webhook-notify
         expression: >
