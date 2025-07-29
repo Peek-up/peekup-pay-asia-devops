@@ -14,6 +14,11 @@ DJANGO_PID=$!
 # Conditionally start Celery services
 if [ "$START_CELERY_WORKER" = "true" ]; then
     echo "Starting Celery workers and beat..."
+
+
+    # Ensure log directory exists
+    mkdir -p /var/log/celery
+
     
     # Start Celery workers
     celery -A config worker -l info -Q short_task_queue > /var/log/celery/short_task_queue.log 2>&1 &
