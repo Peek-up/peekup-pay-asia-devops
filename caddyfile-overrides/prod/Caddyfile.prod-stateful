@@ -1,0 +1,3 @@
+import ./common/monitoring/Caddyfile.prod-stateful
+import ./common/minio/Caddyfile
+import ./peekup-pay/target_health/Caddyfile
