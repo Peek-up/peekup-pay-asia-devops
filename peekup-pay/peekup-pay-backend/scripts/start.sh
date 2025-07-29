@@ -19,6 +19,14 @@ if [ "$START_CELERY_WORKER" = "true" ]; then
     # Ensure log directory exists
     mkdir -p /var/log/celery
 
+    if [ -d /var/log/celery ] && [ -w /var/log/celery ]; then
+        echo "/var/log/celery directory is ready."
+    else
+        echo "ERROR: /var/log/celery could not be created or is not writable." >&2
+        exit 1
+    fi
+
+
     
     # Start Celery workers
     celery -A config worker -l info -Q short_task_queue > /var/log/celery/short_task_queue.log 2>&1 &
