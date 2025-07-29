@@ -29,9 +29,11 @@ if [ "$START_CELERY_WORKER" = "true" ]; then
 
     
     # Start Celery workers
-    celery -A config worker -l info -Q short_task_queue > /var/log/celery/short_task_queue.log 2>&1 &
-    celery -A config worker -l info -Q long_task_queue > /var/log/celery/long_task_queue.log 2>&1 &
-    celery -A config worker -l info -Q celery &
+    bash -c 'celery -A config worker -l info -Q short_task_queue > /var/log/celery/short_task_queue.log 2>&1' &
+    bash -c 'celery -A config worker -l info -Q long_task_queue > /var/log/celery/long_task_queue.log 2>&1' &
+    bash -c 'celery -A config worker -l info -Q celery' &
+    bash -c 'celery -A config beat -l info > /var/log/celery/beat.log 2>&1' &
+
     
     # Start Celery beat
     celery -A config beat -l info > /var/log/celery/beat.log 2>&1 &
