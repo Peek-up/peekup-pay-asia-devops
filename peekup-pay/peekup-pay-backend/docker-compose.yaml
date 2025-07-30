@@ -2,10 +2,10 @@ services:
   peekup-pay-backend:
     build: 
       context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay.git#${PEEKUP_PAY_BACKEND_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
-    command: ./start.sh
+    command: /home/app/peekuppay/start.sh
     restart: always
     volumes:
-      - ../scripts:/home/app/
+      - ../scripts/:/home/app/peekuppay/
     env_file:
       - ../../.env
     environment:
