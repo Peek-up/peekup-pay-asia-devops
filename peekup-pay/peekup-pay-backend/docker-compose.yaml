@@ -4,7 +4,7 @@ services:
       context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay.git#${PEEKUP_PAY_BACKEND_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
     volumes:
       - ./scripts/start.sh:/home/app/peekuppay/scripts/start.sh
-    command: ./start.sh
+    command: ./scripts/start.sh
     restart: always
     env_file:
       - ../../.env
