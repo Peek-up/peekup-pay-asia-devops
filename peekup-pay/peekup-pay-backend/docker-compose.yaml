@@ -5,7 +5,7 @@ services:
     command: /home/app/peekuppay/start.sh
     restart: always
     volumes:
-      - ../scripts/:/home/app/peekuppay/
+      - ../scripts/start.sh:/home/app/peekuppay/start.sh
     env_file:
       - ../../.env
     environment:
