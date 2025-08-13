@@ -1,11 +1,11 @@
 global:
   scrape_interval: 1m
-  evaluation_interval: 1m
 
 scrape_configs:
 
   # NODE EXPORTER (per-host system metrics)
   - job_name: 'node'
+    scrape_interval: 5s
     ec2_sd_configs:
       - region: ap-southeast-1
         port: 9100
@@ -28,6 +28,7 @@ scrape_configs:
 
   # CADVISOR (container metrics)
   - job_name: 'cadvisor'
+    scrape_interval: 15s
     ec2_sd_configs:
       - region: ap-southeast-1
         port: 8080
@@ -48,6 +49,7 @@ scrape_configs:
 
   # KONG (admin/metrics endpoint)
   - job_name: 'kong'
+    scrape_interval: 5s
     ec2_sd_configs:
       - region: ap-southeast-1
         port: 8001
