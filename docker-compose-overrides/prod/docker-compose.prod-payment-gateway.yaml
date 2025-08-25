@@ -1,0 +1,14 @@
+include:
+ - ./common/monitoring/prod/docker-compose.prod.yaml
+ - ./peekup-pay/payment-gateway/docker-compose.yaml
+services:
+  caddy:
+    extends:
+      file: common/caddy/docker-compose.yaml
+      service: caddy
+    volumes:
+      - ./caddyfile-overrides/prod/Caddyfile.prod-payment-gateway:/etc/caddy/Caddyfile
+
+volumes:
+  caddy_data:
+  caddy_config:

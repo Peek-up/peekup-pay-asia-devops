@@ -1,6 +1,5 @@
 include:
  - ./common/monitoring/dev/docker-compose.dev.yaml
- - ./common/redis/docker-compose.yaml
  - ./common/kong/docker-compose.yaml
  - ./peekup-pay/peekup-pay-backend/docker-compose.yaml
 services:
