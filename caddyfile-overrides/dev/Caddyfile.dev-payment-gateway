@@ -1,3 +1,2 @@
-import ./peekup-pay/target_health/Caddyfile
 import ./common/monitoring/dev/Caddyfile.dev
 import ./peekup-pay/payment-gateway/Caddyfile.dev
