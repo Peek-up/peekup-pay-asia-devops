@@ -1,3 +1,7 @@
 {$DOMAIN_SCHEME}://paymentgateway.{$DOMAIN_NAME} {
+    @health path /health
+    respond @health "Healthy!" 200
+
+
     reverse_proxy payment-gateway:3000
 }
