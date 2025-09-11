@@ -144,24 +144,3 @@ services:
       #COINS_PH_PRIVATE_KEY: ${COINS_PH_PRIVATE_KEY:?COINS_PH_PRIVATE_KEY is not set}
       COINS_PH_API_KEY: ${COINS_PH_API_KEY:?HYPERVERGE_LIVCOINS_PH_API_KEYENESS_MODULE_ID is not set}
       COINS_PH_API_SECRET: ${COINS_PH_API_SECRET:?COINS_PH_API_SECRET is not set}
-
-  # Flower - Celery Task Monitor
-  peekup-pay-flower:
-    build: 
-      context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay.git#${PEEKUP_PAY_BACKEND_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
-    command: sh -c "celery -A config flower --port=5555 --address=0.0.0.0"
-    ports:
-      - "5555:5555"
-    restart: always
-    env_file:
-      - ../../.env
-    depends_on:
-      - peekup-pay-backend
-    environment:
-      DJANGO_SETTINGS_MODULE: config.settings
-      CELERY_REDIS_BROKER_URL: ${CELERY_REDIS_BROKER_URL:?CELERY_REDIS_BROKER_URL is not set}
-      REDIS_SSL_CONNECTION: ${REDIS_SSL_CONNECTION:?REDIS_SSL_CONNECTION is not set}
-      REDIS_CONNECTION_URL: ${REDIS_CONNECTION_URL:?REDIS_CONNECTION_URL is not set}
-      REDIS_HOST: ${REDIS_HOST:?REDIS_HOST is not set}
-      REDIS_PORT: ${REDIS_PORT:?REDIS_PORT is not set}
-      REDIS_USERNAME: ${REDIS_USERNAME:?REDIS_USERNAME is not set}
