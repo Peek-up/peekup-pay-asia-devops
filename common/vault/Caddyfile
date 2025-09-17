@@ -1,0 +1,3 @@
+{$DOMAIN_SCHEME}://vault.{$DOMAIN_NAME} {
+    reverse_proxy vault:8200
+}

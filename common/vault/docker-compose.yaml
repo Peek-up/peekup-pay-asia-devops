@@ -1,0 +1,21 @@
+services:
+  vault:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      VAULT_USERNAME: ${ENVIRONMENT_USERNAME:?ENVIRONMENT_USERNAME is not set}
+      VAULT_PASSWORD: ${ENVIRONMENT_PASSWORD:?ENVIRONMENT_PASSWORD is not set}
+      VAULT_ADDR: http://127.0.0.1:8200
+    volumes:
+      - vault:/vault/file
+      - ./vault.json:/vault/config/vault.json
+      - ./:/app/
+      - ../../:/config       # --- THIS IS THE CRITICAL FIX ---
+    cap_add:
+      - IPC_LOCK
+    command: sh -c "chmod +x /app/vault-init.sh && /app/vault-init.sh"
+
+volumes:
+  vault:

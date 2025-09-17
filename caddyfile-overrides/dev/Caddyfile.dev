@@ -1,4 +1,5 @@
 import ./common/kong/Caddyfile.dev
+import ./common/vault/Caddyfile.dev
 import ./common/monitoring/dev/Caddyfile.dev
 import ./peekup-pay/target_health/Caddyfile
 import ./peekup-pay/dashboard/Caddyfile.dev

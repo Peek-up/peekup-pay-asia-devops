@@ -1,5 +1,6 @@
 include:
  - ./common/kong/docker-compose.yaml
+#  - ./common/vault/docker-compose.yaml
  - ./common/monitoring/dev/docker-compose.dev.yaml
  - ./peekup-pay/dashboard/docker-compose.yaml
  - ./peekup-pay/payment-gateway/docker-compose.yaml
