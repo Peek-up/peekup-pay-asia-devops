@@ -1,0 +1,9 @@
+services:
+  dashboard:
+    build:
+      context: https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Peek-up/peekuppay-merchant-crm.git#${DASHBOARD_GITHUB_BRANCH:-${DEFAULT_GITHUB_BRANCH:?DEFAULT_GITHUB_BRANCH is not set}}
+      dockerfile: Dockerfile
+      args:
+        VITE_APP_DOMAIN_DEV: ${VITE_APP_DOMAIN_DEV:?VITE_APP_DOMAIN_DEV is not set}
+        VITE_API_DOCUMENTATION_DOMAIN: ${VITE_API_DOCUMENTATION_DOMAIN:?VITE_API_DOCUMENTATION_DOMAIN is not set}
+    restart: always
