@@ -1,4 +1,4 @@
-{$DOMAIN_SCHEME}://gateway.{$DOMAIN_NAME} {
+{$DOMAIN_SCHEME}://uat-paymentgateway.{$DOMAIN_NAME} {
     @health path /health
     respond @health "Healthy!" 200
 
