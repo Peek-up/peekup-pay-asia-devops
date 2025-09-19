@@ -1,6 +1,6 @@
 include:
  - ./common/monitoring/uat/docker-compose.uat.yaml
- - ./peekup-pay/payment-gateway/docker-compose.yaml
+ - ./peekup-pay/dashboard/docker-compose.yaml
 services:
   caddy:
     extends:
