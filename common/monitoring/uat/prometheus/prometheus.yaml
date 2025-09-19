@@ -1,0 +1,69 @@
+global:
+  scrape_interval: 1m
+
+scrape_configs:
+
+  # NODE EXPORTER (per-host system metrics)
+  - job_name: 'node'
+    scrape_interval: 5s
+    ec2_sd_configs:
+      - region: ap-southeast-1
+        port: 9100
+        filters:
+          - name: tag:Environment
+            values: ["prod"]
+          - name: tag:Monitoring
+            values: ["true"]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_state]
+        regex: running
+        action: keep
+      - source_labels: [__meta_ec2_private_ip]
+        target_label: __address__
+        replacement: '${1}:9100'
+      - source_labels: [__meta_ec2_tag_Name, __meta_ec2_instance_id]
+        regex: (.+);(.+)
+        target_label: instance
+        replacement: '${1}-${2}'
+
+  # CADVISOR (container metrics)
+  - job_name: 'cadvisor'
+    scrape_interval: 15s
+    ec2_sd_configs:
+      - region: ap-southeast-1
+        port: 8080
+        filters:
+          - name: tag:Environment
+            values: ["prod"]
+          - name: tag:Monitoring
+            values: ["true"]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_state]
+        regex: running
+        action: keep
+      - source_labels: [__meta_ec2_private_ip]
+        target_label: __address__
+        replacement: '${1}:8080'
+      - source_labels: [__meta_ec2_tag_Name]
+        target_label: instance
+
+  # KONG (admin/metrics endpoint)
+  - job_name: 'kong'
+    scrape_interval: 5s
+    ec2_sd_configs:
+      - region: ap-southeast-1
+        port: 8001
+        filters:
+          - name: tag:Environment
+            values: ["prod"]
+          - name: tag:Monitoring
+            values: ["true"]
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_state]
+        regex: running
+        action: keep
+      - source_labels: [__meta_ec2_private_ip]
+        target_label: __address__
+        replacement: '${1}:8001'
+      - source_labels: [__meta_ec2_tag_Name]
+        target_label: instance

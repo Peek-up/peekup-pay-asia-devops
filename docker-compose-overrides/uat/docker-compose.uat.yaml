@@ -1,14 +1,12 @@
 include:
- - ./common/monitoring/dev/docker-compose.dev.yaml
- - ./common/kong/docker-compose.yaml
- - ./peekup-pay/peekup-pay-backend/docker-compose.yaml
+ - ./common/monitoring/uat/docker-compose.uat-stateful.yaml
 services:
   caddy:
     extends:
       file: common/caddy/docker-compose.yaml
       service: caddy
     volumes:
-      - ./caddyfile-overrides/dev/Caddyfile.dev:/etc/caddy/Caddyfile
+      - ./caddyfile-overrides/uat/Caddyfile.uat:/etc/caddy/Caddyfile
 
 volumes:
   caddy_data:

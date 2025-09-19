@@ -1,5 +1,5 @@
 include:
- - ./common/monitoring/prod/docker-compose.prod.yaml
+ - ./common/monitoring/uat/docker-compose.uat.yaml
  - ./peekup-pay/payment-gateway/docker-compose.yaml
 services:
   caddy:
@@ -7,7 +7,7 @@ services:
       file: common/caddy/docker-compose.yaml
       service: caddy
     volumes:
-      - ./caddyfile-overrides/dev/Caddyfile.dev-payment-gateway:/etc/caddy/Caddyfile
+      - ./caddyfile-overrides/uat/Caddyfile.uat-gateway:/etc/caddy/Caddyfile
 
 volumes:
   caddy_data:

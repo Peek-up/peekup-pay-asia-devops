@@ -1,2 +1,2 @@
-import ./common/monitoring/dev/Caddyfile.dev
+import ./common/monitoring/uat/Caddyfile.uat
 import ./peekup-pay/payment-gateway/Caddyfile.dev
