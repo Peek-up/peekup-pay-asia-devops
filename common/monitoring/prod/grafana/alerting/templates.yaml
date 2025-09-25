@@ -1,0 +1,113 @@
+apiVersion: 1
+templates:
+  - orgId: 1
+    name: custom-slack-template
+    template: |
+      {{ define "custom_template" }}
+      {{ range .Alerts }}
+      {{ $serviceId := "" }}
+      {{ if .Labels.name }}
+        {{ $serviceId = .Labels.name }}
+      {{ else if .Labels.instance }}
+        {{ $serviceId = .Labels.instance }}
+      {{ else }}
+        {{ $serviceId = "Unknown" }}
+      {{ end }}
+
+      {{/* Sanitize service ID for label key by replacing hyphens with underscores */}}
+      {{ $safeServiceId := reReplaceAll "-" "_" $serviceId }}
+
+      {{/* Construct dynamic owner label keys */}}
+      {{ $owner1Label := printf "owner_1_%s" $safeServiceId }}
+      {{ $owner2Label := printf "owner_2_%s" $safeServiceId }}
+      {{ $owner1 := index .Labels $owner1Label }}
+      {{ $owner2 := index .Labels $owner2Label }}
+
+      {{/* Fallback to generic owner labels if specific ones not found */}}
+      {{ if not $owner1 }}
+        {{ $owner1 = .Labels.owner_1 }}
+      {{ end }}
+      {{ if not $owner2 }}
+        {{ $owner2 = .Labels.owner_2 }}
+      {{ end }}
+
+      {{/* Final fallback to default owners */}}
+      {{ if not $owner1 }}{{ $owner1 = "U083D29RW1H" }}{{ end }}
+      {{ if not $owner2 }}{{ $owner2 = "U08SNHH7UCR" }}{{ end }}
+
+      {{ if eq .Status "firing" }}
+      :rotating_light: *ALERT for* <@{{ $owner1 }}>{{ if ne $owner2 "" }} <@{{ $owner2 }}>{{ end }} — `{{ $serviceId }}` is in *FIRING* state
+      {{ end }}
+      {{ if eq .Status "resolved" }}
+      :green_heart: *RESOLVED for* <@{{ $owner1 }}>{{ if ne $owner2 "" }} <@{{ $owner2 }}>{{ end }} — `{{ $serviceId }}` is now *OK*
+      {{ end }}
+      {{ if eq .Status "pending" }}
+      :large_yellow_circle: *PENDING for* <@{{ $owner1 }}>{{ if ne $owner2 "" }} <@{{ $owner2 }}>{{ end }} — `{{ $serviceId }}` is *pending* alert state
+      {{ end }}
+
+      *Alert Name:* {{ .Labels.alertname }}
+      {{ if eq .Status "resolved" }}
+      *Summary:* Service found
+      {{ else if .Annotations.summary }}
+      *Summary:* {{ .Annotations.summary }}
+      {{ end }}
+      {{ if .Annotations.description }}*Description:* {{ .Annotations.description }}{{ end }}
+
+      {{ if .Values }}
+      *Metric Value(s):*
+      {{ range $key, $value := .Values }}  - *{{ $key }}*: {{ $value }}
+      {{ end }}
+      {{ end }}
+
+      *Labels:*
+      {{ range $key, $value := .Labels }}  - *{{ $key }}*: {{ $value }}
+      {{ end }}
+
+      *Source:* <{{ .GeneratorURL }}|View Source>
+      *Fingerprint:* {{ .Fingerprint }}
+      {{ if .SilenceURL }}*Silence Alert:* <{{ .SilenceURL }}|Silence>{{ end }}
+      {{ if .DashboardURL }}*Dashboard:* <{{ .DashboardURL }}|Open Dashboard>{{ end }}
+      {{ if .PanelURL }}*Panel:* <{{ .PanelURL }}|View Panel>{{ end }}
+
+      ---
+      {{ end }}
+      {{ end }}
+
+  - orgId: 1
+    name: custom-slack-vm-resources-template
+    template: |
+      {{ define "custom_vm_resource_slack_template" }}
+      {{ range .Alerts }}
+      {{ $owner_1 := .Labels.owner_1 }}
+      {{ $owner_2 := .Labels.owner_2 }}
+      {{ if not $owner_1 }}{{ $owner_1 = "Unassigned" }}{{ end }}
+      {{ if not $owner_2 }}{{ $owner_2 = "" }}{{ end }}
+
+      {{ $alertname := .Labels.alertname }}
+      {{ if not $alertname }}{{ $alertname = "Unknown Alert" }}{{ end }}
+
+      {{ if eq .Status "firing" }}
+      :rotating_light: {{ $alertname }} for <@{{ $owner_1 }}> <@{{ $owner_2 }}>
+      • VM resource is in *FIRING* state
+      {{ else if eq .Status "resolved" }}
+      :green_heart: {{ $alertname }} for <@{{ $owner_1 }}> <@{{ $owner_2 }}> is resolved
+      • {{ $alertname }} is now *OK*
+      {{ else if eq .Status "pending" }}
+      :large_yellow_circle: {{ $alertname }} for <@{{ $owner_1 }}> <@{{ $owner_2 }}>
+      • {{ $alertname }} is in *PENDING* state
+      {{ end }}
+
+      *Alert:* `{{ $alertname }}`
+      {{ if .Annotations.summary }}*Summary:* {{ .Annotations.summary }}{{ end }}
+      {{ if .Annotations.description }}*Description:* {{ .Annotations.description }}{{ end }}
+
+      {{ if .Labels.severity }}*Severity:* `{{ .Labels.severity }}`{{ end }}
+      {{ if .Labels.environment }}*Environment:* `{{ .Labels.environment }}`{{ end }}
+
+      *Source:* <{{ .GeneratorURL }}|View Source>
+      {{ if .DashboardURL }}*Dashboard:* <{{ .DashboardURL }}|Open>{{ end }}
+      {{ if .SilenceURL }}*Silence:* <{{ .SilenceURL }}|Click here>{{ end }}
+
+      ---
+      {{ end }}
+      {{ end }}

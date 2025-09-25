@@ -1,0 +1,22 @@
+apiVersion: 1
+contactPoints:
+    - orgId: 1
+      name: slack-alerts
+      receivers:
+        - uid: aewgk3nlanz7kc
+          type: slack
+          settings:
+            text: '{{ template "custom_template" . }}'
+            title: Prod Server - Service Alert
+            url: ${SLACK_WEBHOOK_URL}
+          disableResolveMessage: false
+    - orgId: 1
+      name: Slack-cpu-alerts
+      receivers:
+        - uid: bey83ob6e6juoe
+          type: slack
+          settings:
+            text: '{{ template "custom_vm_resource_slack_template" . }}'
+            title: Prod Server - VM Resource Alert
+            url: ${SLACK_WEBHOOK_URL}
+          disableResolveMessage: false

@@ -21,23 +21,21 @@ services:
       LOKI_TABLE_INDEX_PERIOD: ${LOKI_TABLE_INDEX_PERIOD:-24h}
     command: -config.file=/etc/loki/loki-config.yaml -config.expand-env=true
 
-
   grafana:
     image: grafana/grafana:11.3.2
     restart: always
     depends_on:
-      - prometheus
-    ports:
-      - 3000:3000
+      - loki
     environment:
       GF_SERVER_ROOT_URL: ${DOMAIN_SCHEME}://grafana.${DOMAIN_NAME}
+      GF_EXTERNAL_URL: ${DOMAIN_SCHEME}://grafana.${DOMAIN_NAME}?serverName=${GRAFANA_SERVER_NAME:-Prod Server}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:?SLACK_WEBHOOK_URL is not set}
       GF_SERVER_SERVE_FROM_SUB_PATH: ${GF_SERVER_SERVE_FROM_SUB_PATH:-false}
       GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:?GF_SECURITY_ADMIN_PASSWORD is not set}
     volumes:
       - grafana:/var/lib/grafana
       - ./grafana/:/etc/grafana/provisioning/
-      - ./grafana/dashboards/:/var/lib/grafana/dashboards/ 
 
 
   prometheus:

@@ -1,0 +1,261 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: ServiceAlert
+      folder: SlackAlerts
+      interval: 10s
+      rules:
+        - uid: beq3pab01qby8a
+          title: Service Status
+          condition: C
+          for: 10s
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                datasource:
+                    type: prometheus
+                    uid: PBFA97CFB590B2093
+                editorMode: code
+                expr: max(time() - container_last_seen{name!=""}) by (name)
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 60
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: KeepLast
+          annotations:
+            description: Container {{ $labels.name }} has not been seen in the last 60 seconds.
+            summary: Service missing
+          # Add owner labels based on service name
+          labels:
+            severity: Critical
+            # For epic-caddy-1
+            owner_1_epic_caddy_1: U083D29RW1H
+            owner_2_epic_caddy_1: U08SNHH7UCR
+            # For epic-kong-1
+            owner_1_epic_kong_1: U083D29RW1H
+            owner_2_epic_kong_1: U08SNHH7UCR
+            # For epic-db-1
+            owner_1_epic_db_1: U083D29RW1H
+            owner_2_epic_db_1: U08SNHH7UCR
+            # You can add multiple labels in same format: owner_1_service_name and owner_2_service_name
+          isPaused: false
+          notification_settings:
+            receiver: slack-alerts
+    - orgId: 1
+      name: VM_Alerts
+      folder: SlackAlerts
+      interval: 20s
+      rules:
+        - uid: beq3c4mt9jldse
+          title: High CPU Usage
+          condition: C
+          for: 10s
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                datasource:
+                    type: prometheus
+                    uid: PBFA97CFB590B2093
+                editorMode: code
+                expr: |
+                    100 * (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: KeepLast
+          execErrState: KeepLast
+          keepFiringFor: 10s
+          annotations:
+            description: Current CPU Usage on node Instance {{ $values.A.Labels.instance }} is {{ printf "%.2f" $values.A.Value }}%
+            summary: CPU usage is above 80% on node instance - {{ $labels.instance }}
+          labels:
+            owner_1: U083D29RW1H
+            owner_2: U08SNHH7UCR
+            severity: warning
+          isPaused: false
+          notification_settings:
+            receiver: Slack-cpu-alerts
+        - uid: eeq3jq6ilmeioc
+          title: High RAM Usage
+          condition: C
+          for: 10s
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                datasource:
+                    type: prometheus
+                    uid: PBFA97CFB590B2093
+                editorMode: code
+                expr: ((node_memory_MemTotal_bytes - node_memory_MemFree_bytes - node_memory_Buffers_bytes - node_memory_Cached_bytes) / node_memory_MemTotal_bytes) * 100
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 90
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: KeepLast
+          execErrState: KeepLast
+          annotations:
+            description: Current Ram usage is {{ $value }}
+            summary: Ram usage above 90%
+          labels:
+            owner_1: U083D29RW1H
+            owner_2: U08SNHH7UCR
+            severity: warning
+          isPaused: false
+          notification_settings:
+            receiver: Slack-cpu-alerts
+        - uid: fey81gamxjm68f
+          title: High Disk Usage
+          condition: C
+          for: 10s
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PBFA97CFB590B2093
+              model:
+                datasource:
+                    type: prometheus
+                    uid: PBFA97CFB590B2093
+                editorMode: code
+                expr: |
+                    100 * (1 - (node_filesystem_avail_bytes{instance="node_exporter:9100", job="node", mountpoint="/"} / node_filesystem_size_bytes{instance="node_exporter:9100", job="node", mountpoint="/"}))
+                instant: true
+                intervalMs: 120000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 85
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: KeepLast
+          execErrState: KeepLast
+          keepFiringFor: 10s
+          annotations:
+            description: Current Disk usage is {{ $value }}%
+            summary: Disk usage is above 85%
+          labels:
+            owner_1: U083D29RW1H
+            owner_2: U08SNHH7UCR
+            severity: warning
+          isPaused: false
+          notification_settings:
+            receiver: Slack-cpu-alerts
